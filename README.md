@@ -44,7 +44,7 @@ If you want to connect the remote control to a computer, follow these steps:
 
 ## Additional Notes
 
-- Customize the Arduino sketch to map remote control buttons to specific PlayStation 4 commands or computer functions.
+- Customize the Arduino sketch (`RemoteHEX.h`) to map remote control buttons to specific PlayStation 4 commands or computer functions.
 
 - Ensure that your PlayStation 4 and computer are compatible with the infrared remote control.
 
