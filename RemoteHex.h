@@ -1,0 +1,43 @@
+#ifndef RemoteHex_h
+#define RemoteHex_h
+
+#define LEFT 0x80BF9966
+#define RIGHT 0x80BF837C
+#define UP 0x80BF53AC
+#define DOWN 0x80BF4BB4
+
+#define ON_OFF 0x80BF3BC4
+#define OK 0x80BF738C
+#define INFO 0x80BF0BF4
+#define LANG 0x80BF609F
+#define MENU 0x80BFA956
+#define EXIT 0x80BFA35C
+#define RADIO_TV 0x80BFBB44
+#define SUBT 0x80BF31CE
+#define FAV 0x80BF916E
+#define SLEEP 0x80BF20DF
+#define GAME 0x80BF9B64
+#define OPT 0x80BF6996
+#define MUTE 0x80BF39C6
+#define REFRESH 0x80BF807F
+
+#define VOL_UP 0x80BF01FE
+#define VOL_DOWN 0x80BF817E
+#define CH_UP 0x80BFA15E
+#define CH_DOWN 0x80BF619E
+
+#define FAST_FORWARD 0x80BF30CF
+#define REWIND 0x80BFD02F
+
+#define NUM_0 0x80BFE11E
+#define NUM_1 0x80BF49B6
+#define NUM_2 0x80BFC936
+#define NUM_3 0x80BF33CC
+#define NUM_4 0x80BF718E
+#define NUM_5 0x80BFF10E
+#define NUM_6 0x80BF13EC
+#define NUM_7 0x80BF51AE
+#define NUM_8 0x80BFD12E
+#define NUM_9 0x80BF23DC
+
+#endif
