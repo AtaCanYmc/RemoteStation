@@ -40,4 +40,6 @@
 #define NUM_8 0x80BFD12E
 #define NUM_9 0x80BF23DC
 
+#define HOLD 0xFFFFFFFF
+
 #endif

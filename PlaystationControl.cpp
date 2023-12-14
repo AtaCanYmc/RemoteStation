@@ -4,8 +4,8 @@ PlaystationControl::PlaystationControl(){
 
 }
 
-void PlaystationControl::controlSignal(uint32_t signal) {
-    switch (signal) {
+void PlaystationControl::controlSignal(uint32_t IRsignal) {
+    switch (IRsignal) {
         // Arrow buttons
         case PS_UP: {
           pressUp();
@@ -16,7 +16,9 @@ void PlaystationControl::controlSignal(uint32_t signal) {
           break;
         }
         case PS_LEFT: {
-          pressLeft();
+          //pressLeft();
+          uint32_t HID[] = {KEY_LEFT_ARROW, 10, 1};
+          sendHID(HID);
           break;
         }
         case PS_RIGHT: {
@@ -61,11 +63,30 @@ void PlaystationControl::controlSignal(uint32_t signal) {
           holdBackward();
           break;
         }
+        case HOLD: {
+          controlSignal(lastIR);
+          break;
+        }
         // Check for numeric
         default: {
-          nc.controlSignal(signal);
+          nc.controlSignal(IRsignal);
         }
     }
+    saveIR(IRsignal);
+}
+
+void PlaystationControl::saveIR(uint32_t IRsignal){
+  if(IRsignal != HOLD){
+    lastIR = IRsignal;
+  }
+}
+
+void PlaystationControl::sendHID(uint32_t settings[3]){
+  Keyboard.press(settings[0]);
+  delay(settings[1]);
+  if(settings[2] > 0){
+    Keyboard.releaseAll();
+  }
 }
 
 void PlaystationControl::pressLeft() {

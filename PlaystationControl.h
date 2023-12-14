@@ -30,9 +30,12 @@ class PlaystationControl {
 public:
   NumericControl nc;
   PlaystationControl();
-  void controlSignal(uint32_t signal);
+  void controlSignal(uint32_t IRsignal);
 
 private:
+  uint32_t lastIR = 0x0;
+  void saveIR(uint32_t IRsignal);
+  void sendHID(uint32_t settings[3]);
 
   void pressLeft();
   void pressRight();
