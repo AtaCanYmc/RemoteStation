@@ -5,73 +5,13 @@ PlaystationControl::PlaystationControl(){
 }
 
 void PlaystationControl::controlSignal(uint32_t IRsignal) {
-    switch (IRsignal) {
-        // Arrow buttons
-        case PS_UP: {
-          pressUp();
-          break;
-        }
-        case PS_DOWN: {
-          pressDown();
-          break;
-        }
-        case PS_LEFT: {
-          //pressLeft();
-          uint32_t HID[] = {KEY_LEFT_ARROW, 10, 1};
-          sendHID(HID);
-          break;
-        }
-        case PS_RIGHT: {
-          pressRight();
-          break;
-        }
-        // Clickable
-        case PS_X: {
-          pressX();
-          break;
-        }
-        case PS_O: {
-          pressO();
-          break;
-        }
-        case PS_O_2: {
-          pressO2();
-          break;
-        }
-        case PS_MENU: {
-          pressMenu();
-          break;
-        }      
-        case PS_OPT: {
-          pressOpt();
-          break;
-        }  
-        case PS_SHARE: {
-          pressShare();
-          break;
-        }    
-        // Hold buttons
-        case PS_HOLD_MENU: {
-          holdMenu();
-          break;
-        }      
-        case PS_HOLD_RIGHT: {
-          holdForward();
-          break;
-        }  
-        case PS_HOLD_LEFT: {
-          holdBackward();
-          break;
-        }
-        case HOLD: {
-          controlSignal(lastIR);
-          break;
-        }
-        // Check for numeric
-        default: {
-          nc.controlSignal(IRsignal);
-        }
+    if(IRsignal == HOLD){
+      IRsignal = lastIR;
     }
+    else if(IRsignal == RADIO_TV){
+      return;
+    }
+    sendHID(IRtoHID(IRsignal));
     saveIR(IRsignal);
 }
 
@@ -89,6 +29,63 @@ void PlaystationControl::sendHID(uint32_t settings[3]){
   }
 }
 
+uint32_t* PlaystationControl::IRtoHID(uint32_t IRsignal){
+  uint32_t* HID; 
+
+  switch (IRsignal) {
+    // Arrow buttons
+    case PS_UP: {
+      HID = new uint32_t[3]{KEY_UP_ARROW, 50, 1};
+      break;
+    }
+    case PS_DOWN: {
+      HID = new uint32_t[3]{KEY_DOWN_ARROW, 50, 1};
+      break;
+    }
+    case PS_LEFT: {
+      HID = new uint32_t[3]{KEY_LEFT_ARROW, 50, 1};
+      break;
+    }
+    case PS_RIGHT: {
+      HID = new uint32_t[3]{KEY_RIGHT_ARROW, 50, 1};
+      break;
+    }
+    // Clickable
+    case PS_X: {
+      HID = new uint32_t[3]{KEY_KP_ENTER, 50, 1};
+      break;
+    }
+    case PS_O: {
+      HID = new uint32_t[3]{0x08, 50, 1}; //backspace
+      break;
+    }
+    case PS_O_2: {
+      HID = new uint32_t[3]{KEY_ESC, 50, 1}; // ESC
+      break;
+    }
+    case PS_MENU: {
+      HID = new uint32_t[3]{KEY_PAUSE, 50, 1};
+      break;
+    }      
+    case PS_OPT: {
+      HID = new uint32_t[3]{KEY_F3, 50, 1};
+      break;
+    }  
+    case PS_SHARE: {
+      HID = new uint32_t[3]{KEY_PRINT_SCREEN, 50, 1};
+      break;
+    }    
+    // Hold buttons
+    case PS_HOLD_MENU: {
+      HID = new uint32_t[3]{KEY_PAUSE, 1000, 1};
+      break;
+    }      
+  }
+
+  return HID;
+}
+
+/*
 void PlaystationControl::pressLeft() {
   Serial.println("Pressed on left");
   Keyboard.press(KEY_LEFT_ARROW);
@@ -179,7 +176,7 @@ void PlaystationControl::holdBackward() {
   delay(1200);
   Keyboard.releaseAll();
 }
-
+*/
 
 
 

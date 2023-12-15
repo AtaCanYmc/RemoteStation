@@ -18,12 +18,18 @@
 #define PS_O_2 LANG
 #define PS_OPT OPT
 #define PS_MENU MENU
-#define PS_SHARE INFO
+#define PS_SHARE FAV
 
 // HOLD BUTTONS
-#define PS_HOLD_MENU FAV
-#define PS_HOLD_RIGHT FAST_FORWARD
-#define PS_HOLD_LEFT REWIND
+#define PS_HOLD_MENU ON_OFF
+
+struct IR2HID {
+  uint32_t IRsignal;
+  uint32_t HIDsignal;
+  String mode;
+
+  IR2HID(uint32_t IR=0, uint32_t HID=0, String m="PS4") : IRsignal(IRsignal), HIDsignal(HID), mode(m) {}
+};
 
 class PlaystationControl {
 
@@ -33,25 +39,13 @@ public:
   void controlSignal(uint32_t IRsignal);
 
 private:
+  String modes[4] = {"Youtube", "Disney+", "Spotify", "Netflix"};
+  String currentMode = modes[0];
   uint32_t lastIR = 0x0;
+  IR2HID test{0,0,""};
   void saveIR(uint32_t IRsignal);
   void sendHID(uint32_t settings[3]);
-
-  void pressLeft();
-  void pressRight();
-  void pressUp();
-  void pressDown();
-
-  void pressX();
-  void pressO();
-  void pressO2();
-  void pressOpt();
-  void pressMenu();
-  void pressShare();
-
-  void holdMenu();
-  void holdForward();
-  void holdBackward();
+  uint32_t* IRtoHID(uint32_t IRsignal);
 };
 
 #endif
