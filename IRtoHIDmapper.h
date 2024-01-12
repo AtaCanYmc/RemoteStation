@@ -29,7 +29,7 @@ private:
     {LEFT, KEY_LEFT_ARROW, 50, "PS4"},          // ⬅️
     {RIGHT, KEY_RIGHT_ARROW, 50, "PS4"},        // 👉🏻
     // General(7)
-    {OK, 0x28, 50, "PS4"},                      // 🅧
+    {OK, KEY_RETURN, 50, "PS4"},                // 🅧
     {EXIT, 0x08, 50, "PS4"},                    // ⭕️ (Backspace)
     {LANG, KEY_ESC, 50, "PS4"},                 // ⭕️
     {MENU, KEY_PAUSE, 50, "PS4"},               // PS button 
