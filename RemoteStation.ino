@@ -19,6 +19,7 @@ void setup() {
 
 void loop() {
   if (irrecv.decode(& results)) {
+    Serial.print("IR Signal: ");
     Serial.println(results.value, HEX);
     ps.controlSignal(results.value);
     irrecv.resume();

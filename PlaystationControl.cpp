@@ -6,10 +6,16 @@ PlaystationControl::PlaystationControl(){
 
 void PlaystationControl::controlSignal(uint32_t IRsignal) {
     if(IRsignal == HOLD){ // Hold
-      IRsignal = lastIR;
+      IRsignal = this->lastIR;
     }
-    else if(lastIR == RADIO_TV){ // Change mode
+    else if(IRsignal == RADIO_TV){
+      saveIR(IRsignal);
+      return;
+    }
+
+    if(this->lastIR == RADIO_TV && IRsignal != RADIO_TV){ // Change mode
       mapper.setMode(IRsignal);
+      saveIR(IRsignal);
       return;
     }
 

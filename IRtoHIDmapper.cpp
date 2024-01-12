@@ -31,6 +31,8 @@ void IRtoHIDmapper::setMode(uint32_t signal){
       currentMode = modes[0];
     }
   }
+  Serial.print("currentMode: ");
+  Serial.println(currentMode);
 }
 
 
