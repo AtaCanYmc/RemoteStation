@@ -19,7 +19,6 @@ void PlaystationControl::controlSignal(uint32_t IRsignal) {
     }
 
     sendHID(HIDobject.HIDsignal, HIDobject.HIDtime);
-    //Serial.println(HIDobject.HIDsignal);
     saveIR(IRsignal);
 }
 
