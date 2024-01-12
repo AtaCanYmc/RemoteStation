@@ -15,6 +15,7 @@ void PlaystationControl::controlSignal(uint32_t IRsignal) {
 
     IR2HID HIDobject = mapper.searchIR(IRsignal);
     if(HIDobject.mode == "null"){
+      saveIR(0x0);
       return;
     }
 
