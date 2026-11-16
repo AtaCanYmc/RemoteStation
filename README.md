@@ -22,6 +22,7 @@
 - [Application Profiles and Mode Switching](#application-profiles-and-mode-switching)
 - [Key Mapping Table](#key-mapping-table)
 - [Quick Start](#quick-start)
+- [Technical Documentation](#technical-documentation)
 - [Repository Structure](#repository-structure)
 - [Governance and Contributing](#governance-and-contributing)
 - [License](#license)
@@ -160,7 +161,19 @@ pio run --target upload
 Inspect decoded hex codes and debug prints at 9600 baud:
 ```bash
 pio device monitor -b 9600
+# Alternatively using Makefile:
+make monitor
 ```
+
+---
+
+## Technical Documentation
+
+Detailed guides and specifications are maintained in the [`docs/`](docs/) directory:
+
+- **[Hardware & Wiring Specification](docs/hardware.md)**: Electrical pinouts, receiver requirements, and decoupling guidelines.
+- **[Protocol & Key Mapping](docs/mapping.md)**: NEC 32-bit infrared protocol, state machine mode switching, and custom mapping tutorial.
+- **[Troubleshooting Guide](docs/troubleshooting.md)**: Diagnostic steps for unrecognised remote signals, stuck keys, and console detection.
 
 ---
 
@@ -176,7 +189,15 @@ RemoteStation/
 │   ├── PULL_REQUEST_TEMPLATE/
 │   │   └── pull_request_template.md
 │   └── workflows/
-│       └── ci.yml
+│       ├── ci.yml
+│       └── release-please.yml
+├── assets/
+│   └── logo.png
+├── docs/
+│   ├── README.md
+│   ├── hardware.md
+│   ├── mapping.md
+│   └── troubleshooting.md
 ├── include/
 │   ├── IRtoHIDmapper.h
 │   ├── PlaystationControl.h
@@ -188,10 +209,13 @@ RemoteStation/
 ├── .editorconfig
 ├── .gitattributes
 ├── .gitignore
+├── .release-please-manifest.json
 ├── CONTRIBUTING.md
 ├── LICENSE
+├── Makefile
 ├── platformio.ini
 ├── README.md
+├── release-please-config.json
 └── SECURITY.md
 ```
 
