@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.2.0](https://github.com/AtaCanYmc/RemoteStation/compare/v1.1.0...v1.2.0) (2026-11-16)
+
+
+### Features
+
+* **mapper:** add Netflix application mode shortcuts and key mapping ([4430043](https://github.com/AtaCanYmc/RemoteStation/commit/44300430caf7a80f69838e7a60f5ad7bda8a7317))
+* **web:** add favicon.ico, robots.txt, humans.txt, and llms.txt ([bfcd3d8](https://github.com/AtaCanYmc/RemoteStation/commit/bfcd3d83580ee234f346b59a9930f161c73febbf))
+* **web:** add promotion, Web Serial terminal, and firmware flashing web app ([7550f8f](https://github.com/AtaCanYmc/RemoteStation/commit/7550f8fcd4a59c92fb8c929a736fca299ac850e2))
+
+
+### Code Refactoring
+
+* **web:** streamline Web Serial connection flow and keymap filters ([da14fd2](https://github.com/AtaCanYmc/RemoteStation/commit/da14fd26d59952ad22c7142f9745875c490f5191))
+
 ## [1.1.0](https://github.com/AtaCanYmc/RemoteStation/compare/v1.0.0...v1.1.0) (2026-11-16)
 
 
