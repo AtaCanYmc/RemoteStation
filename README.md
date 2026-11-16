@@ -96,6 +96,7 @@ The firmware maintains stateful application contexts to accommodate differing ho
 | `RADIO_TV` + `1` | `Youtube` | YouTube application playback and navigation controls |
 | `RADIO_TV` + `2` | `Disney+` | Disney+ specific rewind, forward, and mute hotkeys |
 | `RADIO_TV` + `3` | `Browser` | PlayStation 4 Internet Browser controls |
+| `RADIO_TV` + `4` | `Netflix` | Netflix playback, 10s skip, and search controls |
 | Default | `PS4` | System-wide D-Pad navigation, Enter, and Back buttons |
 
 ---
@@ -135,6 +136,11 @@ The firmware maintains stateful application contexts to accommodate differing ho
 | `Disney+` | `FAST_FORWARD` | `0x80BF30CF` | `'P'` | Seek forward |
 | `Browser` | `INFO` | `0x80BF0BF4` | `KEY_F1` | Address bar focus |
 | `Browser` | `SUBT` | `0x80BF31CE` | `KEY_F2` | Toggle full screen |
+| `Netflix` | `PLAY` | `0x80BF708F` | `0x20` (Space) | Play / Pause |
+| `Netflix` | `MUTE` | `0x80BF39C6` | `'M'` | Toggle audio mute |
+| `Netflix` | `REWIND` | `0x80BFD02F` | `KEY_LEFT_ARROW` | Seek backward 10 seconds |
+| `Netflix` | `FAST_FORWARD` | `0x80BF30CF` | `KEY_RIGHT_ARROW` | Seek forward 10 seconds |
+| `Netflix` | `INFO` | `0x80BF0BF4` | `'S'` | Audio & subtitles / search |
 
 ---
 

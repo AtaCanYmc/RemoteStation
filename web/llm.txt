@@ -25,8 +25,9 @@ RemoteStation provides stateful profile switching to map differing hotkeys acros
 - `MODE_YOUTUBE`: YouTube playback shortcuts (Space for Play/Pause, 'J' for 10s Rewind, 'L' for 10s Fast Forward, 'M' for Mute, F4/F5 for Previous/Next).
 - `MODE_DISNEY`: Disney+ hotkeys ('M' for Mute, 'O' for Rewind, 'P' for Fast Forward).
 - `MODE_BROWSER`: PlayStation 4 web browser controls (F1 for URL search focus, F2 for Fullscreen).
+- `MODE_NETFLIX`: Netflix shortcuts (Space for Play/Pause, 'M' for Mute, Left/Right arrow for 10s seek, 'S' for audio/subtitles).
 
-Trigger sequence: Press `RADIO_TV` (`0x80BFBB44`), then press a numeric digit (`NUM_1` for YouTube, `NUM_2` for Disney+, `NUM_3` for Browser).
+Trigger sequence: Press `RADIO_TV` (`0x80BFBB44`), then press a numeric digit (`NUM_1` for YouTube, `NUM_2` for Disney+, `NUM_3` for Browser, `NUM_4` for Netflix).
 
 ## Documentation and Codebase
 

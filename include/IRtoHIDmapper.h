@@ -9,7 +9,8 @@ enum AppMode : uint8_t {
   MODE_PS4 = 0,
   MODE_YOUTUBE,
   MODE_DISNEY,
-  MODE_BROWSER
+  MODE_BROWSER,
+  MODE_NETFLIX
 };
 
 struct IR2HID {
@@ -29,7 +30,7 @@ public:
 
 private:
   AppMode currentMode = MODE_YOUTUBE;
-  static const IR2HID buttons[33];
+  static const IR2HID buttons[38];
 };
 
 #endif

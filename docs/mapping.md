@@ -32,10 +32,12 @@ stateDiagram-v2
     YouTube --> ModeSelect : Press RADIO_TV
     DisneyPlus --> ModeSelect : Press RADIO_TV
     Browser --> ModeSelect : Press RADIO_TV
+    Netflix --> ModeSelect : Press RADIO_TV
     
     ModeSelect --> YouTube : Press NUM_1
     ModeSelect --> DisneyPlus : Press NUM_2
     ModeSelect --> Browser : Press NUM_3
+    ModeSelect --> Netflix : Press NUM_4
     ModeSelect --> YouTube : Invalid / Other Key
 ```
 
@@ -45,6 +47,7 @@ stateDiagram-v2
 | `MODE_YOUTUBE` | YouTube App | `PLAY` (Space), `REWIND` ('J'), `FAST_FORWARD` ('L'), `MUTE` ('M'), `PREV` (F4), `NEXT` (F5), `INFO` ('S') |
 | `MODE_DISNEY` | Disney+ App | `MUTE` ('M'), `REWIND` ('O'), `FAST_FORWARD` ('P') |
 | `MODE_BROWSER` | PS4 Browser | `INFO` (F1 Search), `SUBT` (F2 Fullscreen) |
+| `MODE_NETFLIX` | Netflix App | `PLAY` (Space), `MUTE` ('M'), `REWIND` (Left Arrow), `FAST_FORWARD` (Right Arrow), `INFO` ('S') |
 
 ---
 

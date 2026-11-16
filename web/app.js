@@ -25,7 +25,7 @@ const KEYMAP_DATA = [
   { name: "NUM_1", hex: "0x80BF49B6", hid: "'1'", action: "Numeric Input 1 / YouTube Mode Selector", mode: "PS4" },
   { name: "NUM_2", hex: "0x80BFC936", hid: "'2'", action: "Numeric Input 2 / Disney+ Mode Selector", mode: "PS4" },
   { name: "NUM_3", hex: "0x80BF33CC", hid: "'3'", action: "Numeric Input 3 / Browser Mode Selector", mode: "PS4" },
-  { name: "NUM_4", hex: "0x80BF718E", hid: "'4'", action: "Numeric Input 4", mode: "PS4" },
+  { name: "NUM_4", hex: "0x80BF718E", hid: "'4'", action: "Numeric Input 4 / Netflix Mode Selector", mode: "PS4" },
   { name: "NUM_5", hex: "0x80BFF10E", hid: "'5'", action: "Numeric Input 5", mode: "PS4" },
   { name: "NUM_6", hex: "0x80BF13EC", hid: "'6'", action: "Numeric Input 6", mode: "PS4" },
   { name: "NUM_7", hex: "0x80BF51AE", hid: "'7'", action: "Numeric Input 7", mode: "PS4" },
@@ -48,7 +48,14 @@ const KEYMAP_DATA = [
 
   // PS4 Browser (2)
   { name: "INFO", hex: "0x80BF0BF4", hid: "KEY_F1", action: "Focus URL / Address Bar", mode: "Browser" },
-  { name: "SUBT", hex: "0x80BF31CE", hid: "KEY_F2", action: "Toggle Full Screen Mode", mode: "Browser" }
+  { name: "SUBT", hex: "0x80BF31CE", hid: "KEY_F2", action: "Toggle Full Screen Mode", mode: "Browser" },
+
+  // Netflix Shortcuts (5)
+  { name: "PLAY", hex: "0x80BF708F", hid: "0x20 (Space)", action: "Play / Pause Toggle", mode: "Netflix" },
+  { name: "MUTE", hex: "0x80BF39C6", hid: "'M'", action: "Toggle Audio Mute", mode: "Netflix" },
+  { name: "REWIND", hex: "0x80BFD02F", hid: "KEY_LEFT_ARROW", action: "Seek Backward 10s", mode: "Netflix" },
+  { name: "FAST_FORWARD", hex: "0x80BF30CF", hid: "KEY_RIGHT_ARROW", action: "Seek Forward 10s", mode: "Netflix" },
+  { name: "INFO", hex: "0x80BF0BF4", hid: "'S'", action: "Search & Audio / Subtitle", mode: "Netflix" }
 ];
 
 // 2. DOM Elements
@@ -199,6 +206,9 @@ function processIncomingLine(rawLine) {
       } else if (found.name === "NUM_3" && activeMode !== "Browser") {
         activeMode = "Browser";
         activeProfileText.textContent = "Browser";
+      } else if (found.name === "NUM_4" && activeMode !== "Netflix") {
+        activeMode = "Netflix";
+        activeProfileText.textContent = "Netflix";
       }
     } else {
       appendTerminal(`[RX] ${normalizedHex} (Unmapped or custom NEC code)`, "rx");

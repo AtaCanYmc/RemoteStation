@@ -1,6 +1,6 @@
 #include "IRtoHIDmapper.h"
 
-const IR2HID IRtoHIDmapper::buttons[33] = {
+const IR2HID IRtoHIDmapper::buttons[38] = {
   // Movement(4)
   {UP, KEY_UP_ARROW, 50, MODE_PS4, true},
   {DOWN, KEY_DOWN_ARROW, 50, MODE_PS4, true},
@@ -44,7 +44,14 @@ const IR2HID IRtoHIDmapper::buttons[33] = {
 
   // PS4 Browser(2)
   {INFO, KEY_F1, 50, MODE_BROWSER, true},
-  {SUBT, KEY_F2, 50, MODE_BROWSER, true}
+  {SUBT, KEY_F2, 50, MODE_BROWSER, true},
+
+  // Netflix Shortcuts(5)
+  {PLAY, 0x20, 50, MODE_NETFLIX, true},
+  {MUTE, 'M', 50, MODE_NETFLIX, true},
+  {REWIND, KEY_LEFT_ARROW, 50, MODE_NETFLIX, true},
+  {FAST_FORWARD, KEY_RIGHT_ARROW, 50, MODE_NETFLIX, true},
+  {INFO, 'S', 50, MODE_NETFLIX, true}
 };
 
 IRtoHIDmapper::IRtoHIDmapper() {
@@ -69,6 +76,9 @@ void IRtoHIDmapper::setMode(uint32_t signal) {
       break;
     case NUM_3:
       currentMode = MODE_BROWSER;
+      break;
+    case NUM_4:
+      currentMode = MODE_NETFLIX;
       break;
     default:
       currentMode = MODE_YOUTUBE;
