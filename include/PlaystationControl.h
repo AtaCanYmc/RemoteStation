@@ -7,7 +7,6 @@
 #include "IRtoHIDmapper.h"
 
 class PlaystationControl {
-
 public:
   IRtoHIDmapper mapper;
   PlaystationControl();
@@ -16,8 +15,7 @@ public:
 private:
   uint32_t lastIR = 0x0;
   void saveIR(uint32_t IRsignal);
-  void sendHID(uint32_t signal, uint32_t time);
-  uint32_t* IRtoHID(uint32_t IRsignal);
+  void sendHID(uint8_t signal, uint16_t time);
 };
 
 #endif

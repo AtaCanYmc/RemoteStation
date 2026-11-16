@@ -52,13 +52,13 @@ Open `include/RemoteHex.h` and define a descriptive macro for the captured hex c
 ```
 
 ### 3. Register Key Mapping
-Open `include/IRtoHIDmapper.h` and add an `IR2HID` entry to the `buttons` array:
+Open `src/IRtoHIDmapper.cpp` and add an `IR2HID` entry to the `buttons` array:
 
 ```cpp
-{BUTTON_NAME, KEY_TARGET, 50, "TargetMode"}
+{BUTTON_NAME, KEY_TARGET, 50, MODE_TARGET, true}
 ```
 
-If introducing a new application mode, add the mode name to the `modes` array in `include/IRtoHIDmapper.h` and handle switching logic in `src/IRtoHIDmapper.cpp`.
+If introducing a new application mode, add the mode enum to `AppMode` in `include/IRtoHIDmapper.h` and handle switching logic in `src/IRtoHIDmapper.cpp`.
 
 ---
 

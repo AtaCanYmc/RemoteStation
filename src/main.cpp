@@ -3,8 +3,8 @@
 #include <IRremote.h>
 #include "PlaystationControl.h"
 
-int RECV_PIN = 2;
-int RECV_EN = 3;
+const int RECV_PIN = 2;
+const int RECV_EN = 3;
 IRrecv irrecv(RECV_PIN);
 decode_results results;
 
@@ -12,14 +12,18 @@ PlaystationControl ps;
 
 void setup() {
   Serial.begin(9600);
-  Keyboard.begin();
-  irrecv.enableIRIn();
+
+  // Power and stabilize IR receiver before enabling interrupts
   pinMode(RECV_EN, OUTPUT);
   digitalWrite(RECV_EN, HIGH);
+  delay(10);
+
+  Keyboard.begin();
+  irrecv.enableIRIn();
 }
 
 void loop() {
-  if (irrecv.decode(& results)) {
+  if (irrecv.decode(&results)) {
     Serial.println(results.value, HEX);
     ps.controlSignal(results.value);
     irrecv.resume();
