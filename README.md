@@ -1,11 +1,15 @@
-# RemoteStation
+<div align="center">
+  <img src="assets/logo.png" alt="RemoteStation Logo" width="160" height="160" />
+  <h1>RemoteStation</h1>
+  <p>Firmware for Arduino Leonardo (ATmega32U4) that decodes 38 kHz infrared remote signals and translates them into USB Human Interface Device (HID) keyboard keystrokes for Sony PlayStation 4 navigation and media playback.</p>
 
-[![CI](https://github.com/AtaCanYmc/RemoteStation/actions/workflows/ci.yml/badge.svg)](https://github.com/AtaCanYmc/RemoteStation/actions/workflows/ci.yml)
-[![Release](https://github.com/AtaCanYmc/RemoteStation/actions/workflows/release-please.yml/badge.svg)](https://github.com/AtaCanYmc/RemoteStation/actions/workflows/release-please.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![PlatformIO](https://img.shields.io/badge/PlatformIO-supported-orange.svg)](https://platformio.org)
-
-Firmware for Arduino Leonardo (ATmega32U4) that decodes 38 kHz infrared remote signals and translates them into USB Human Interface Device (HID) keyboard keystrokes for Sony PlayStation 4 navigation and media playback.
+  <p>
+    <a href="https://github.com/AtaCanYmc/RemoteStation/actions/workflows/ci.yml"><img src="https://github.com/AtaCanYmc/RemoteStation/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
+    <a href="https://github.com/AtaCanYmc/RemoteStation/actions/workflows/release-please.yml"><img src="https://github.com/AtaCanYmc/RemoteStation/actions/workflows/release-please.yml/badge.svg" alt="Release" /></a>
+    <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT" /></a>
+    <a href="https://platformio.org"><img src="https://img.shields.io/badge/PlatformIO-supported-orange.svg" alt="PlatformIO" /></a>
+  </p>
+</div>
 
 ---
 
