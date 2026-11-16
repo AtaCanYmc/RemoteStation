@@ -1,0 +1,45 @@
+name: Release Please
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: googleapis/release-please-action@v4
+        id: release
+        with:
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+
+      - name: Checkout Code
+        if: ${{ steps.release.outputs.releases_created }}
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        if: ${{ steps.release.outputs.releases_created }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install PlatformIO
+        if: ${{ steps.release.outputs.releases_created }}
+        run: pip install platformio
+
+      - name: Compile Release Firmware
+        if: ${{ steps.release.outputs.releases_created }}
+        run: pio run
+
+      - name: Upload Release Firmware Assets
+        if: ${{ steps.release.outputs.releases_created }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload ${{ steps.release.outputs.tag_name }} .pio/build/leonardo/firmware.hex .pio/build/leonardo/firmware.elf --clobber

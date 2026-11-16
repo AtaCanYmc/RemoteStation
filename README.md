@@ -1,6 +1,7 @@
 # RemoteStation
 
 [![CI](https://github.com/AtaCanYmc/RemoteStation/actions/workflows/ci.yml/badge.svg)](https://github.com/AtaCanYmc/RemoteStation/actions/workflows/ci.yml)
+[![Release](https://github.com/AtaCanYmc/RemoteStation/actions/workflows/release-please.yml/badge.svg)](https://github.com/AtaCanYmc/RemoteStation/actions/workflows/release-please.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![PlatformIO](https://img.shields.io/badge/PlatformIO-supported-orange.svg)](https://platformio.org)
 
