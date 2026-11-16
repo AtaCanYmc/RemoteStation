@@ -1,0 +1,24 @@
+# PlatformIO
+.pio
+.pioenvs
+.piolibdeps
+
+# IDEs and Editors
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Operating System Files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# Build Artifacts & Firmware Binaries
+build/
+*.hex
+*.elf
+*.bin
+*.o
+*.a

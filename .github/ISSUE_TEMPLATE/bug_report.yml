@@ -1,0 +1,58 @@
+name: Bug Report
+description: Report a reproducible defect, mapping failure, or firmware build error
+title: "fix: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Verify that this issue has not already been reported.
+        For security concerns (e.g. unintended keystroke injection), consult [SECURITY.md](../../SECURITY.md).
+  - type: textarea
+    id: summary
+    attributes:
+      label: Bug Description
+      description: Provide a concise description of the observed defect.
+      placeholder: Describe the incorrect behavior or unexpected HID signal.
+    validations:
+      required: true
+  - type: input
+    id: hardware
+    attributes:
+      label: Hardware Configuration
+      description: Specify board model, IR receiver pinout, and remote control model.
+      placeholder: Arduino Leonardo (ATmega32U4), VS1838B IR receiver on Pin 2, Sony/Generic NEC Remote.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: Step-by-step instructions to trigger the issue.
+      placeholder: |
+        1. Point remote at receiver.
+        2. Press 'PLAY' button (Hex: 0x80BF708F).
+        3. Observe serial monitor and PS4/PC output.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What keystroke or state change was expected?
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Serial Monitor Output / Build Logs
+      description: Paste relevant 9600-baud serial output or PlatformIO compiler logs.
+      render: shell
+  - type: input
+    id: toolchain
+    attributes:
+      label: Toolchain Version
+      description: PlatformIO Core or Arduino IDE version.
+      placeholder: PlatformIO Core 6.1.19 / macOS 15.0
+    validations:
+      required: true

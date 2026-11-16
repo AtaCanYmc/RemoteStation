@@ -1,0 +1,39 @@
+name: Feature Request
+description: Propose a new application profile, IR remote protocol, or key mapping
+title: "feat: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please check existing issues and open pull requests before submitting a proposal.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem Statement
+      description: What limitation or missing application mapping does this proposal address?
+      placeholder: Adding media shortcuts for Twitch on PS4...
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed Solution
+      description: Describe the remote hex codes, target HID keystrokes, and profile logic.
+      placeholder: Map button 0x... to keystroke KEY_... in mode...
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: Describe alternative button assignments or workarounds considered.
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Contributor Checklist
+      options:
+        - label: I verified that the proposed HID keystroke is supported by the target platform.
+          required: true
+        - label: This request adheres to repository governance and anti-AI-slop standards.
+          required: true

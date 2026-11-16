@@ -1,56 +1,204 @@
-# RemoteStation with Arduino Leonardo
+# RemoteStation
+
+[![CI](https://github.com/AtaCanYmc/RemoteStation/actions/workflows/ci.yml/badge.svg)](https://github.com/AtaCanYmc/RemoteStation/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![PlatformIO](https://img.shields.io/badge/PlatformIO-supported-orange.svg)](https://platformio.org)
+
+Firmware for Arduino Leonardo (ATmega32U4) that decodes 38 kHz infrared remote signals and translates them into USB Human Interface Device (HID) keyboard keystrokes for Sony PlayStation 4 navigation and media playback.
+
+---
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Hardware Specifications](#hardware-specifications)
+- [Wiring and Pinout](#wiring-and-pinout)
+- [System Architecture](#system-architecture)
+- [Application Profiles and Mode Switching](#application-profiles-and-mode-switching)
+- [Key Mapping Table](#key-mapping-table)
+- [Quick Start](#quick-start)
+- [Repository Structure](#repository-structure)
+- [Governance and Contributing](#governance-and-contributing)
+- [License](#license)
+
+---
 
 ## Overview
 
-This Arduino Leonardo project enables remote control functionality for the PlayStation 4 using an infrared (IR) remote. With this setup, you can easily navigate through various media applications on the PlayStation 4, including movies, TV shows, and music. Additionally, the remote control can be connected to a computer for extended functionality.
+RemoteStation leverages the native USB peripheral of the ATmega32U4 microcontroller to act as a standard USB HID keyboard. When an infrared transmitter sends a command, the firmware decodes the NEC protocol packet, checks the current application profile, and dispatches corresponding keyboard strokes to the PlayStation 4 or host computer with configurable hold and release timings.
 
-## Features
+---
 
-- **PlayStation 4 Control:** Use a compatible infrared remote control to navigate and control media playback on your PlayStation 4.
-  
-- **Media Applications:** Access and control movie, TV show, and music applications with ease.
+## Hardware Specifications
 
-- **Computer Connectivity:** Connect the remote control to a computer for extended functionality and customization.
+| Component / Parameter | Specification | Notes |
+| :--- | :--- | :--- |
+| Microcontroller | Microchip ATmega32U4 | 8-bit AVR RISC architecture |
+| Core Clock | 16 MHz crystal oscillator | Synchronous USB clocking |
+| Operating Voltage | 5.0 V DC | Powered directly over USB bus |
+| Flash Memory | 28 KB available | 4 KB reserved for USB bootloader |
+| SRAM | 2.5 KB internal | Static allocation for IR buffer |
+| USB Interface | Native USB 2.0 Full-Speed | HID keyboard descriptor reports |
+| IR Receiver Module | VS1838B (or compatible 38 kHz) | Active-low demodulated output |
+| Supported IR Protocol | NEC 32-bit format | Address + inverted command structure |
 
-## Prerequisites
+---
 
-Before getting started, ensure you have the following:
+## Wiring and Pinout
 
-- Arduino Leonardo board
-- Infrared (IR) receiver module
-- Compatible infrared remote control
-- USB cable for Arduino Leonardo
-- [Arduino IDE](https://www.arduino.cc/en/software) installed on your computer
+Connect the 38 kHz IR receiver module to the Arduino Leonardo according to the following wiring schedule:
 
-## Installation
+| Arduino Leonardo Pin | Type | Firmware Identifier | Connected Hardware | Notes |
+| :--- | :--- | :--- | :--- | :--- |
+| `Pin 2` (PD1) | Digital Input | `RECV_PIN` | IR Receiver Data Out | Captured by `IRrecv` interrupt service routine |
+| `Pin 3` (PD0) | Digital Output | `RECV_EN` | IR Receiver VCC / Enable | Set to `HIGH` during `setup()` to power receiver |
+| `GND` | Ground | `GND` | IR Receiver Ground | Common system ground return |
+| `Micro-USB Port` | USB Bus | Native D+/D- | PlayStation 4 / Host PC | Supplies 5V power and carries HID keyboard reports |
 
-1. Connect the IR receiver module to the Arduino Leonardo board.
+---
 
-2. Upload the provided Arduino sketch (`RemoteStation.ino`) to your Arduino Leonardo using the Arduino IDE.
+## System Architecture
 
-3. Power the Arduino Leonardo via USB.
+```mermaid
+flowchart LR
+    Remote["IR Remote (NEC 38 kHz)"] -->|"Infrared Burst"| Sensor["VS1838B Demodulator"]
+    Sensor -->|"Demodulated Pulses (Pin 2)"| Leonardo["Arduino Leonardo (ATmega32U4)"]
+    
+    subgraph Firmware["RemoteStation Firmware"]
+        Leonardo -->|"Raw Timing"| Decoder["IRrecv (decode)"]
+        Decoder -->|"32-bit Hex Code"| Controller["PlaystationControl"]
+        Controller -->|"State & Mode Filter"| Mapper["IRtoHIDmapper"]
+        Mapper -->|"Target Keycode & Duration"| HIDEngine["Keyboard.press / delay / releaseAll"]
+    end
+    
+    HIDEngine -->|"USB HID Keyboard Report"| Host["PlayStation 4 / PC"]
+```
 
-4. Point your infrared remote control towards the IR receiver module and start controlling your PlayStation 4.
+---
 
-## Computer Setup
+## Application Profiles and Mode Switching
 
-If you want to connect the remote control to a computer, follow these steps:
+The firmware maintains stateful application contexts to accommodate differing hotkey schemes across media applications.
 
-1. Connect the Arduino Leonardo to your computer using the USB cable.
+### Switching Profiles
+1. Press the `RADIO_TV` key on the remote.
+2. Immediately press a numeric key corresponding to the desired profile:
 
-2. Install the necessary drivers for the Arduino Leonardo.
+| Profile Selector | Target Mode | Target Application / Scope |
+| :--- | :--- | :--- |
+| `RADIO_TV` + `1` | `Youtube` | YouTube application playback and navigation controls |
+| `RADIO_TV` + `2` | `Disney+` | Disney+ specific rewind, forward, and mute hotkeys |
+| `RADIO_TV` + `3` | `Browser` | PlayStation 4 Internet Browser controls |
+| Default | `PS4` | System-wide D-Pad navigation, Enter, and Back buttons |
 
-3. Open a serial communication terminal on your computer to receive and process remote control inputs.
+---
 
-## Additional Notes
+## Key Mapping Table
 
-- Customize the Arduino sketch (`RemoteHEX.h`) to map remote control buttons to specific PlayStation 4 commands or computer functions.
+### System and Navigation Mappings (`PS4` Mode)
 
-- Ensure that your PlayStation 4 and computer are compatible with the infrared remote control.
+| Remote Function | Raw Hex Code | HID Output | Mapped PlayStation Action |
+| :--- | :--- | :--- | :--- |
+| `UP` | `0x80BF53AC` | `KEY_UP_ARROW` | D-Pad Up |
+| `DOWN` | `0x80BF4BB4` | `KEY_DOWN_ARROW` | D-Pad Down |
+| `LEFT` | `0x80BF9966` | `KEY_LEFT_ARROW` | D-Pad Left |
+| `RIGHT` | `0x80BF837C` | `KEY_RIGHT_ARROW` | D-Pad Right |
+| `OK` | `0x80BF738C` | `KEY_KP_ENTER` | Cross (Confirm / Select) |
+| `EXIT` | `0x80BFA35C` | `0x08` (Backspace) | Circle (Back / Cancel) |
+| `LANG` | `0x80BF609F` | `KEY_ESC` | Circle (Alternative Back) |
+| `MENU` | `0x80BFA956` | `KEY_PAUSE` | PlayStation Button (Quick Tap) |
+| `ON_OFF` | `0x80BF3BC4` | `KEY_PAUSE` (1000ms) | PlayStation Button (Hold / Power Menu) |
+| `FAV` | `0x80BF916E` | `KEY_PRINT_SCREEN` | Share Menu |
+| `OPT` | `0x80BF6996` | `KEY_F3` | Options Menu |
+| `NUM_0` to `NUM_9` | `0x80BFE11E` - `0x80BF23DC` | `'0'` to `'9'` | Numpad Input |
 
-## Contributing
+### Application-Specific Shortcuts
 
-Feel free to contribute to the development of this project by submitting issues or pull requests.
+| Mode | Remote Key | Raw Hex Code | HID Keystroke | Function |
+| :--- | :--- | :--- | :--- | :--- |
+| `Youtube` | `PLAY` | `0x80BF708F` | `0x20` (Space) | Play / Pause |
+| `Youtube` | `REWIND` | `0x80BFD02F` | `'J'` | Seek backward 10 seconds |
+| `Youtube` | `FAST_FORWARD` | `0x80BF30CF` | `'L'` | Seek forward 10 seconds |
+| `Youtube` | `MUTE` | `0x80BF39C6` | `'M'` | Toggle audio mute |
+| `Youtube` | `PREV` | `0x80BFA05F` | `KEY_F4` | Previous track / video |
+| `Youtube` | `NEXT` | `0x80BFE01F` | `KEY_F5` | Next track / video |
+| `Youtube` | `INFO` | `0x80BF0BF4` | `'S'` | Focus search bar |
+| `Disney+` | `MUTE` | `0x80BF39C6` | `'M'` | Toggle audio mute |
+| `Disney+` | `REWIND` | `0x80BFD02F` | `'O'` | Seek backward |
+| `Disney+` | `FAST_FORWARD` | `0x80BF30CF` | `'P'` | Seek forward |
+| `Browser` | `INFO` | `0x80BF0BF4` | `KEY_F1` | Address bar focus |
+| `Browser` | `SUBT` | `0x80BF31CE` | `KEY_F2` | Toggle full screen |
+
+---
+
+## Quick Start
+
+### 1. Clone and Enter Repository
+```bash
+git clone https://github.com/AtaCanYmc/RemoteStation.git
+cd RemoteStation
+```
+
+### 2. Build Firmware
+Compile the firmware for the Arduino Leonardo target:
+```bash
+pio run
+```
+
+### 3. Flash to Microcontroller
+Connect your Arduino Leonardo via USB and execute:
+```bash
+pio run --target upload
+```
+
+### 4. Monitor Serial Output
+Inspect decoded hex codes and debug prints at 9600 baud:
+```bash
+pio device monitor -b 9600
+```
+
+---
+
+## Repository Structure
+
+```text
+RemoteStation/
+├── .github/
+│   ├── ISSUE_TEMPLATE/
+│   │   ├── config.yaml
+│   │   ├── bug_report.yml
+│   │   └── feature_request.yml
+│   ├── PULL_REQUEST_TEMPLATE/
+│   │   └── pull_request_template.md
+│   └── workflows/
+│       └── ci.yml
+├── include/
+│   ├── IRtoHIDmapper.h
+│   ├── PlaystationControl.h
+│   └── RemoteHex.h
+├── src/
+│   ├── IRtoHIDmapper.cpp
+│   ├── PlaystationControl.cpp
+│   └── main.cpp
+├── .editorconfig
+├── .gitattributes
+├── .gitignore
+├── CONTRIBUTING.md
+├── LICENSE
+├── platformio.ini
+├── README.md
+└── SECURITY.md
+```
+
+---
+
+## Governance and Contributing
+
+- Pull requests and code updates must adhere to the rules outlined in [CONTRIBUTING.md](CONTRIBUTING.md).
+- Security policies, vulnerability scopes, and reporting SLAs are documented in [SECURITY.md](SECURITY.md).
+- All changes are verified in CI using PlatformIO Core.
+
+---
 
 ## License
 
