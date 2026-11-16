@@ -20,26 +20,29 @@ jobs:
           manifest-file: .release-please-manifest.json
 
       - name: Checkout Code
-        if: ${{ steps.release.outputs.releases_created }}
+        if: ${{ steps.release.outputs.release_created == 'true' }}
         uses: actions/checkout@v4
 
       - name: Set up Python
-        if: ${{ steps.release.outputs.releases_created }}
+        if: ${{ steps.release.outputs.release_created == 'true' }}
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
       - name: Install PlatformIO
-        if: ${{ steps.release.outputs.releases_created }}
+        if: ${{ steps.release.outputs.release_created == 'true' }}
         run: pip install platformio
 
       - name: Compile Release Firmware
-        if: ${{ steps.release.outputs.releases_created }}
+        if: ${{ steps.release.outputs.release_created == 'true' }}
         run: pio run
 
       - name: Upload Release Firmware Assets
-        if: ${{ steps.release.outputs.releases_created }}
+        if: ${{ steps.release.outputs.release_created == 'true' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG_NAME: ${{ steps.release.outputs.tag_name }}
         run: |
-          gh release upload ${{ steps.release.outputs.tag_name }} .pio/build/leonardo/firmware.hex .pio/build/leonardo/firmware.elf --clobber
+          if [ -n "$TAG_NAME" ]; then
+            gh release upload "$TAG_NAME" .pio/build/leonardo/firmware.hex .pio/build/leonardo/firmware.elf --clobber
+          fi
