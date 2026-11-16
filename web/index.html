@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <title>RemoteStation - Infrared to USB HID Gateway for PlayStation 4</title>
+  <meta name="description" content="Open-source Arduino Leonardo (ATmega32U4) firmware that translates 38 kHz infrared remote signals into native USB HID keystrokes for Sony PlayStation 4 navigation and media control.">
+  <link rel="icon" type="image/png" href="logo.png">
+  <link rel="stylesheet" href="style.css">
+  <script>
+    // Prevent flash of unstyled theme (FOUC)
+    try {
+      const stored = localStorage.getItem("color-scheme");
+      if (stored === "light" || stored === "dark") {
+        document.querySelector('meta[name="color-scheme"]').content = stored;
+      }
+    } catch (e) {}
+  </script>
+</head>
+<body>
+  <!-- Global Header & Navigation -->
+  <header class="site-header">
+    <div class="header-inner container">
+      <a href="#" class="brand" aria-label="RemoteStation Home">
+        <img src="logo.png" alt="RemoteStation Logo" class="brand-logo" width="36" height="36">
+        <span class="brand-name">RemoteStation</span>
+      </a>
+
+      <nav class="nav-menu" aria-label="Main Navigation">
+        <a href="#flasher" class="nav-link">Web Flasher</a>
+        <a href="#hardware" class="nav-link">Hardware & Wiring</a>
+        <a href="#keymap" class="nav-link">Key Mapping</a>
+        <a href="#quickstart" class="nav-link">Quick Start</a>
+      </nav>
+
+      <div class="header-actions">
+        <button id="theme-toggle" class="btn-icon" aria-label="Toggle color theme" title="Toggle color theme">
+          <svg class="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg class="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+
+        <a href="https://github.com/AtaCanYmc/RemoteStation" class="btn btn-secondary btn-sm" target="_blank" rel="noopener noreferrer">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+          </svg>
+          <span>GitHub</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero Section -->
+    <section class="hero-section container">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        <span>Open-Source Embedded Hardware & Firmware</span>
+      </div>
+
+      <h1 class="hero-title">Control Your PlayStation 4 with an Infrared Remote</h1>
+      <p class="hero-description">
+        RemoteStation decodes standard 38 kHz infrared signals and maps them to native USB HID keyboard keystrokes via Arduino Leonardo for media playback and system navigation.
+      </p>
+
+      <div class="hero-actions">
+        <a href="#flasher" class="btn btn-primary">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+            <line x1="8" y1="21" x2="16" y2="21"></line>
+            <line x1="12" y1="17" x2="12" y2="21"></line>
+          </svg>
+          <span>Web Flasher & Terminal</span>
+        </a>
+
+        <a href="firmware.hex" download="RemoteStation_Leonardo.hex" class="btn btn-secondary">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          <span>Download Firmware (.HEX)</span>
+        </a>
+      </div>
+
+      <!-- Real Hardware Specifications -->
+      <div class="specs-grid">
+        <div class="spec-card">
+          <div class="spec-label">Microcontroller</div>
+          <div class="spec-value">ATmega32U4 (16 MHz)</div>
+          <div class="spec-sub">Arduino Leonardo 5V</div>
+        </div>
+        <div class="spec-card">
+          <div class="spec-label">IR Protocol</div>
+          <div class="spec-value">NEC 32-bit (38 kHz)</div>
+          <div class="spec-sub">VS1838B Demodulator</div>
+        </div>
+        <div class="spec-card">
+          <div class="spec-label">USB Interface</div>
+          <div class="spec-value">Native USB HID</div>
+          <div class="spec-sub">Standard Keyboard Reports</div>
+        </div>
+        <div class="spec-card">
+          <div class="spec-label">Memory Utilization</div>
+          <div class="spec-value">2.1 KB RAM (83%)</div>
+          <div class="spec-sub">8.7 KB Flash (30%)</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Web Flasher and Live Serial Terminal -->
+    <section id="flasher" class="section container">
+      <div class="section-header">
+        <h2 class="section-title">Web Serial Terminal & Flashing Assistant</h2>
+        <p class="section-desc">
+          Connect directly to your Arduino Leonardo via the browser Web Serial API, inspect real-time decoded infrared packets, or load the precompiled firmware.
+        </p>
+      </div>
+
+      <!-- Unsupported Browser Notice -->
+      <div id="serial-unsupported-banner" class="alert alert-warning" style="display: none;">
+        <strong>Browser Compatibility Notice:</strong> Web Serial API is not supported in this browser. Please use Google Chrome, Microsoft Edge, or Opera for live serial inspection and in-browser board flashing. You can still download the .hex binary below to flash via command line.
+      </div>
+
+      <div class="terminal-dashboard">
+        <!-- Control Bar -->
+        <div class="terminal-controls">
+          <div class="control-group">
+            <button id="btn-connect" class="btn btn-primary btn-sm">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+              </svg>
+              <span>Connect to USB Port</span>
+            </button>
+
+            <button id="btn-disconnect" class="btn btn-danger btn-sm" disabled>
+              <span>Disconnect</span>
+            </button>
+
+            <div class="select-wrapper">
+              <label for="baud-rate-select" class="sr-only">Baud Rate</label>
+              <select id="baud-rate-select" class="form-select">
+                <option value="9600" selected>9600 Baud (Monitoring Mode)</option>
+                <option value="57600">57600 Baud (Bootloader)</option>
+                <option value="115200">115200 Baud</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <button id="btn-clear-term" class="btn btn-secondary btn-sm" title="Clear terminal screen">
+              <span>Clear</span>
+            </button>
+            <button id="btn-copy-term" class="btn btn-secondary btn-sm" title="Copy terminal log to clipboard">
+              <span>Copy Log</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Terminal Output View -->
+        <div class="terminal-screen" id="terminal-screen" role="log" aria-live="polite" aria-label="Serial output log">
+          <div class="terminal-line terminal-system">RemoteStation Web Serial console initialized.</div>
+          <div class="terminal-line terminal-system">Click 'Connect to USB Port' to select your Arduino Leonardo device.</div>
+        </div>
+
+        <!-- Statusbar -->
+        <div class="terminal-statusbar">
+          <div class="status-indicator">
+            <span class="status-dot status-offline" id="status-dot"></span>
+            <span id="status-text">Disconnected</span>
+          </div>
+          <div class="status-metrics">
+            <span>Packets Received: <strong id="packet-count">0</strong></span>
+            <span>Active Profile: <strong id="active-profile-text">YouTube</strong></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Flashing Guide Options -->
+      <div class="flashing-guide-card">
+        <h3 class="card-title">Firmware Flashing Methods</h3>
+        <p class="card-desc">
+          Choose one of the following methods to transfer the precompiled firmware to your Arduino Leonardo board.
+        </p>
+
+        <div class="flashing-grid">
+          <div class="flashing-option">
+            <div class="option-header">
+              <span class="option-num">1</span>
+              <h4>PlatformIO Core</h4>
+            </div>
+            <p>Compile and flash with a single command:</p>
+            <div class="code-block">
+              <code>pio run --target upload</code>
+              <button class="btn-copy-code" data-code="pio run --target upload" aria-label="Copy Command">Copy</button>
+            </div>
+          </div>
+
+          <div class="flashing-option">
+            <div class="option-header">
+              <span class="option-num">2</span>
+              <h4>Makefile Workflow</h4>
+            </div>
+            <p>Execute the automated build and flash target:</p>
+            <div class="code-block">
+              <code>make run</code>
+              <button class="btn-copy-code" data-code="make run" aria-label="Copy Command">Copy</button>
+            </div>
+          </div>
+
+          <div class="flashing-option">
+            <div class="option-header">
+              <span class="option-num">3</span>
+              <h4>Direct AVRDUDE Flash</h4>
+            </div>
+            <p>Flash the downloaded HEX binary via Caterina bootloader:</p>
+            <div class="code-block">
+              <code>avrdude -p atmega32u4 -c avr109 -P /dev/ttyACM0 -U flash:w:firmware.hex:i</code>
+              <button class="btn-copy-code" data-code="avrdude -p atmega32u4 -c avr109 -P /dev/ttyACM0 -U flash:w:firmware.hex:i" aria-label="Copy Command">Copy</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Hardware & Wiring -->
+    <section id="hardware" class="section container">
+      <div class="section-header">
+        <h2 class="section-title">Hardware & Wiring Specification</h2>
+        <p class="section-desc">
+          Connect your 3-pin 38 kHz infrared receiver module (VS1838B) to the Arduino Leonardo according to the schedule below.
+        </p>
+      </div>
+
+      <div class="hardware-grid">
+        <!-- Pinout Table -->
+        <div class="table-card">
+          <h3 class="card-subtitle">Pin Connections Table</h3>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Leonardo Pin</th>
+                  <th>Firmware Identifier</th>
+                  <th>Receiver Terminal</th>
+                  <th>Function</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>Pin 2</code> (PD1)</td>
+                  <td><code>RECV_PIN</code></td>
+                  <td>Data / OUT</td>
+                  <td>Interrupt-driven capture of demodulated optical pulses</td>
+                </tr>
+                <tr>
+                  <td><code>Pin 3</code> (PD0)</td>
+                  <td><code>RECV_EN</code></td>
+                  <td>VCC (Power)</td>
+                  <td>Active-HIGH 5V supply and power stabilization control</td>
+                </tr>
+                <tr>
+                  <td><code>GND</code></td>
+                  <td><code>GND</code></td>
+                  <td>GND (Ground)</td>
+                  <td>Common system reference ground</td>
+                </tr>
+                <tr>
+                  <td><code>Micro-USB</code></td>
+                  <td><code>D+ / D- / VBUS</code></td>
+                  <td>PlayStation 4 USB</td>
+                  <td>5V power supply and native USB HID keyboard reporting</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Electrical Guidelines -->
+        <div class="info-card">
+          <h3 class="card-subtitle">Electrical Guidelines</h3>
+          <ul class="info-list">
+            <li>
+              <strong>Controlled Power Supply:</strong> Pin 3 drives receiver VCC HIGH with a 10 ms stabilization delay during <code>setup()</code>, preventing floating input spikes during boot.
+            </li>
+            <li>
+              <strong>Decoupling Filter:</strong> When using jumper wires exceeding 15 cm, place a <code>0.1 µF</code> ceramic capacitor across receiver VCC and GND to filter USB line ripple.
+            </li>
+            <li>
+              <strong>Optical Shielding:</strong> Avoid placing the receiver under direct sunlight or adjacent to unshielded CFL lamps to prevent false interrupt triggering.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Keymap & Profile Explorer -->
+    <section id="keymap" class="section container">
+      <div class="section-header">
+        <h2 class="section-title">Interactive Keymap & Mode Explorer</h2>
+        <p class="section-desc">
+          Inspect how infrared remote codes translate to PlayStation 4 controls across application profiles.
+        </p>
+      </div>
+
+      <div class="keymap-dashboard">
+        <!-- Toolbar -->
+        <div class="keymap-toolbar">
+          <div class="profile-tabs" role="tablist" aria-label="Application Profile Selection">
+            <button class="tab-btn active" data-filter="all" role="tab" aria-selected="true">All Keys (33)</button>
+            <button class="tab-btn" data-filter="PS4" role="tab" aria-selected="false">PS4 System (21)</button>
+            <button class="tab-btn" data-filter="Youtube" role="tab" aria-selected="false">YouTube (7)</button>
+            <button class="tab-btn" data-filter="Disney+" role="tab" aria-selected="false">Disney+ (3)</button>
+            <button class="tab-btn" data-filter="Browser" role="tab" aria-selected="false">Browser (2)</button>
+          </div>
+
+          <div class="search-box">
+            <label for="key-search" class="sr-only">Search key or hex code</label>
+            <input type="text" id="key-search" class="search-input" placeholder="Filter by button name, hex code, or action...">
+          </div>
+        </div>
+
+        <!-- Mode Switch Indicator -->
+        <div class="mode-switch-banner">
+          <div class="mode-step">
+            <span class="step-badge">1</span>
+            <span>Press <strong>RADIO_TV</strong> on your remote</span>
+          </div>
+          <div class="mode-arrow">&rarr;</div>
+          <div class="mode-step">
+            <span class="step-badge">2</span>
+            <span>Press numeric key: <strong>1</strong> (YouTube), <strong>2</strong> (Disney+), <strong>3</strong> (Browser)</span>
+          </div>
+        </div>
+
+        <!-- Keymap Table -->
+        <div class="table-responsive">
+          <table class="data-table keymap-table" id="keymap-table">
+            <thead>
+              <tr>
+                <th>Remote Button</th>
+                <th>NEC Raw Hex</th>
+                <th>HID Keystroke</th>
+                <th>PlayStation 4 Action</th>
+                <th>Scope Profile</th>
+              </tr>
+            </thead>
+            <tbody id="keymap-tbody">
+              <!-- Dynamically populated by app.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Start -->
+    <section id="quickstart" class="section container">
+      <div class="section-header">
+        <h2 class="section-title">Quick Start</h2>
+        <p class="section-desc">
+          Clone, compile, and flash the firmware in three commands.
+        </p>
+      </div>
+
+      <div class="steps-container">
+        <div class="step-card">
+          <div class="step-number">1</div>
+          <h3>Clone Repository</h3>
+          <p>Download the source tree to your workstation:</p>
+          <div class="code-block">
+            <code>git clone https://github.com/AtaCanYmc/RemoteStation.git && cd RemoteStation</code>
+            <button class="btn-copy-code" data-code="git clone https://github.com/AtaCanYmc/RemoteStation.git && cd RemoteStation" aria-label="Copy Command">Copy</button>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">2</div>
+          <h3>Compile Firmware</h3>
+          <p>Build the binary for the Arduino Leonardo target:</p>
+          <div class="code-block">
+            <code>make build</code>
+            <button class="btn-copy-code" data-code="make build" aria-label="Copy Command">Copy</button>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">3</div>
+          <h3>Flash & Connect</h3>
+          <p>Flash the MCU and plug into the PlayStation 4 front USB port:</p>
+          <div class="code-block">
+            <code>make upload</code>
+            <button class="btn-copy-code" data-code="make upload" aria-label="Copy Command">Copy</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Global Footer -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <img src="logo.png" alt="RemoteStation Logo" width="28" height="28">
+        <span>RemoteStation</span>
+      </div>
+      <p class="footer-text">
+        Licensed under the <a href="https://github.com/AtaCanYmc/RemoteStation/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">MIT License</a>.
+      </p>
+      <div class="footer-links">
+        <a href="https://github.com/AtaCanYmc/RemoteStation" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://github.com/AtaCanYmc/RemoteStation/blob/main/SECURITY.md" target="_blank" rel="noopener noreferrer">Security Policy</a>
+        <a href="https://github.com/AtaCanYmc/RemoteStation/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer">Contributing</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

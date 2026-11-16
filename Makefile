@@ -4,7 +4,7 @@
 ENV ?= leonardo
 BAUD ?= 9600
 
-.PHONY: all build upload monitor run clean compiledb check help
+.PHONY: all build upload monitor run clean compiledb check web help
 
 all: build ## Build firmware for target board
 
@@ -28,6 +28,10 @@ compiledb: ## Generate compile_commands.json for IDEs and LSP
 
 check: ## Run PlatformIO static code analysis
 	pio check
+
+web: ## Serve the web flasher and documentation website locally
+	@echo "Serving web app at http://localhost:8080 ..."
+	@python3 -m http.server --directory web 8080
 
 help: ## Display this help message
 	@echo "RemoteStation Build and Deployment Utility"

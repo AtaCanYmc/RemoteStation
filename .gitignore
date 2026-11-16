@@ -22,3 +22,4 @@ build/
 *.bin
 *.o
 *.a
+!web/firmware.hex

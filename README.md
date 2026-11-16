@@ -165,6 +165,13 @@ pio device monitor -b 9600
 make monitor
 ```
 
+### 5. Web Flasher & Live Console (Browser)
+Launch the local web application for browser-based Web Serial monitoring and firmware flashing:
+```bash
+make web
+# Open http://localhost:8080 in Chrome, Edge, or Opera
+```
+
 ---
 
 ## Technical Documentation
@@ -206,6 +213,12 @@ RemoteStation/
 │   ├── IRtoHIDmapper.cpp
 │   ├── PlaystationControl.cpp
 │   └── main.cpp
+├── web/
+│   ├── app.js
+│   ├── firmware.hex
+│   ├── index.html
+│   ├── logo.png
+│   └── style.css
 ├── .editorconfig
 ├── .gitattributes
 ├── .gitignore
