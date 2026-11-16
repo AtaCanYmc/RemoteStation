@@ -4,6 +4,7 @@
   <p>Firmware for Arduino Leonardo (ATmega32U4) that decodes 38 kHz infrared remote signals and translates them into USB Human Interface Device (HID) keyboard keystrokes for Sony PlayStation 4 navigation and media playback.</p>
 
   <p>
+    <a href="https://atacanymc.github.io/RemoteStation/"><img src="https://img.shields.io/badge/Web%20App-Live%20Demo-0070d1?logo=googlechrome&logoColor=white" alt="Live Web App" /></a>
     <a href="https://github.com/AtaCanYmc/RemoteStation/actions/workflows/ci.yml"><img src="https://github.com/AtaCanYmc/RemoteStation/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
     <a href="https://github.com/AtaCanYmc/RemoteStation/actions/workflows/release-please.yml"><img src="https://github.com/AtaCanYmc/RemoteStation/actions/workflows/release-please.yml/badge.svg" alt="Release" /></a>
     <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT" /></a>
@@ -166,7 +167,7 @@ make monitor
 ```
 
 ### 5. Web Flasher & Live Console (Browser)
-Launch the local web application for browser-based Web Serial monitoring and firmware flashing:
+Access the live web flasher at **[atacanymc.github.io/RemoteStation](https://atacanymc.github.io/RemoteStation/)** or serve locally:
 ```bash
 make web
 # Open http://localhost:8080 in Chrome, Edge, or Opera
