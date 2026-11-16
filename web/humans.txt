@@ -1,0 +1,18 @@
+/* TEAM */
+Author: Ata Can Yaymacı
+GitHub: https://github.com/AtaCanYmc
+Contact: atacanymc@gmail.com
+Location: Istanbul, Turkey
+
+/* THANKS */
+Arduino Community
+PlatformIO Maintainers
+z3t0 / IRremote Library Contributors
+
+/* SITE */
+Last update: 2026-11-16
+Standards: HTML5, Modern CSS (light-dark), Web Serial API
+Components: Vanilla JavaScript (Zero External Frameworks)
+Doctype: HTML5
+IDE / Toolchain: PlatformIO Core, CLion, Neovim
+Microcontroller: Microchip ATmega32U4 (Arduino Leonardo)

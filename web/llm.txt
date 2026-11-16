@@ -1,0 +1,37 @@
+# RemoteStation
+
+> Open-source firmware for Arduino Leonardo (ATmega32U4) that decodes 38 kHz infrared remote signals and translates them into USB Human Interface Device (HID) keyboard keystrokes for Sony PlayStation 4 navigation and media playback.
+
+## Technical Architecture
+
+- Microcontroller: Microchip ATmega32U4 (8-bit AVR RISC @ 16 MHz, 5V logic).
+- Memory Constraints: 2.5 KB SRAM, 28 KB Flash (zero dynamic heap allocation; uses static const mapping tables).
+- USB Protocol: Native Full-Speed USB 2.0 HID Keyboard descriptor (driverless enumeration on PlayStation 4 and PCs).
+- Optical Input: 38 kHz carrier infrared demodulator (VS1838B) connected to Pin 2 (`RECV_PIN`) with power gating on Pin 3 (`RECV_EN`).
+- Transmission Format: NEC 32-bit protocol (address, inverted address, command, inverted command, and repeat frames).
+
+## Pinout and Electrical Connections
+
+- Pin 2 (PD1 / INT1): Active-low demodulated IR pulse train input (`RECV_PIN`).
+- Pin 3 (PD0): Active-high 5V supply enable pin for the IR receiver module (`RECV_EN`).
+- GND: Common reference ground return.
+- Micro-USB Port: Powers the MCU and delivers USB HID keyboard reports to the PlayStation 4 or host computer.
+
+## Application Profiles and Mode Switching
+
+RemoteStation provides stateful profile switching to map differing hotkeys across PlayStation 4 media applications:
+
+- `MODE_PS4`: Universal system navigation (D-Pad, Confirm, Back, Home, Share, Options, Numpad 0-9).
+- `MODE_YOUTUBE`: YouTube playback shortcuts (Space for Play/Pause, 'J' for 10s Rewind, 'L' for 10s Fast Forward, 'M' for Mute, F4/F5 for Previous/Next).
+- `MODE_DISNEY`: Disney+ hotkeys ('M' for Mute, 'O' for Rewind, 'P' for Fast Forward).
+- `MODE_BROWSER`: PlayStation 4 web browser controls (F1 for URL search focus, F2 for Fullscreen).
+
+Trigger sequence: Press `RADIO_TV` (`0x80BFBB44`), then press a numeric digit (`NUM_1` for YouTube, `NUM_2` for Disney+, `NUM_3` for Browser).
+
+## Documentation and Codebase
+
+- [Root README](https://github.com/AtaCanYmc/RemoteStation/blob/main/README.md): Project overview, Quick Start, and build instructions.
+- [Hardware Specification](https://github.com/AtaCanYmc/RemoteStation/blob/main/docs/hardware.md): Electrical schematics and receiver decoupling guidelines.
+- [Protocol & Key Mapping](https://github.com/AtaCanYmc/RemoteStation/blob/main/docs/mapping.md): Full 33-button hex and HID key translation table.
+- [Troubleshooting Guide](https://github.com/AtaCanYmc/RemoteStation/blob/main/docs/troubleshooting.md): Diagnosis for optical noise, USB detection, and baud settings.
+- [Web Companion](https://atacanymc.github.io/RemoteStation/): Live in-browser Web Serial terminal and firmware flashing companion.
